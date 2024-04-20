@@ -2485,7 +2485,7 @@ void state::load_scenario_data(parsers::error_handler& err) {
 			for(auto prov_file : list_files(subdir, NATIVE(".txt"))) {
 				auto file_name = simple_fs::native_to_utf8(get_full_name(prov_file));
 				auto name_start = file_name.c_str();
-				auto name_end = name_begin + file_name.length();
+				auto name_end = name_start + file_name.length();
 				auto value_start = name_start;
 				for(; value_start < name_end; ++value_start) {
 					if(isdigit(*value_start))
