@@ -726,6 +726,9 @@ TRIGGER_FUNCTION(tf_x_core_scope_nation) {
 				auto nid = fatten(ws.world, to_nation(p_slot));
 				auto ident = nid.get_identity_holder_as_nation().get_identity();
 
+				if(ident.get_core().begin() == ident.get_core().end())
+					return false;
+
 				if(*tval & trigger::is_existence_scope) {
 					auto accumulator = existence_accumulator(ws, tval, t_slot, f_slot);
 
@@ -736,7 +739,7 @@ TRIGGER_FUNCTION(tf_x_core_scope_nation) {
 					}
 
 					accumulator.flush();
-					return !accumulator.result;
+					return accumulator.result;
 				} else {
 					auto accumulator = universal_accumulator(ws, tval, t_slot, f_slot);
 
@@ -747,7 +750,7 @@ TRIGGER_FUNCTION(tf_x_core_scope_nation) {
 					}
 
 					accumulator.flush();
-					return !accumulator.result;
+					return accumulator.result;
 				}
 			},
 			primary_slot, this_slot, from_slot);
