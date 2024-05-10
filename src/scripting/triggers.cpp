@@ -742,7 +742,7 @@ TRIGGER_FUNCTION(tf_x_core_scope_nation) {
 					}
 
 					accumulator.flush();
-					return accumulator.result;
+					return !accumulator.result;
 				} else {
 					auto accumulator = universal_accumulator(ws, tval, t_slot, f_slot);
 
@@ -753,7 +753,7 @@ TRIGGER_FUNCTION(tf_x_core_scope_nation) {
 					}
 
 					accumulator.flush();
-					return accumulator.result;
+					return !accumulator.result;
 				}
 			},
 			primary_slot, this_slot, from_slot);

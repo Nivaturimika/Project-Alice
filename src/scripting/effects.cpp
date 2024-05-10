@@ -897,6 +897,8 @@ uint32_t es_x_owned_scope_state(EFFECT_PARAMTERS) {
 uint32_t es_x_core_scope(EFFECT_PARAMTERS) {
 	auto tag = ws.world.nation_get_identity_from_identity_holder(trigger::to_nation(primary_slot));
 	auto cores_range = ws.world.national_identity_get_core(tag);
+	if(cores_range.begin() == cores_range.end())
+		return 0;
 
 	if((tval[0] & effect::is_random_scope) != 0) {
 		std::vector<dcon::province_id> rlist;
@@ -919,23 +921,17 @@ uint32_t es_x_core_scope(EFFECT_PARAMTERS) {
 		}
 		return 0;
 	} else {
-		std::vector<dcon::province_id> plist;
-
+		uint32_t i = 0;
 		if((tval[0] & effect::scope_has_limit) != 0) {
 			auto limit = trigger::payload(tval[2]).tr_id;
 			for(auto p : cores_range) {
 				if(trigger::evaluate(ws, limit, trigger::to_generic(p.get_province().id), this_slot, from_slot))
-					plist.push_back(p.get_province());
+					i += apply_subeffects(tval, ws, trigger::to_generic(p.get_province()), this_slot, from_slot, r_hi, r_lo + i, els);
 			}
 		} else {
 			for(auto p : cores_range) {
-				plist.push_back(p.get_province());
+				i += apply_subeffects(tval, ws, trigger::to_generic(p.get_province()), this_slot, from_slot, r_hi, r_lo + i, els);
 			}
-		}
-
-		uint32_t i = 0;
-		for(auto p : plist) {
-			i += apply_subeffects(tval, ws, trigger::to_generic(p), this_slot, from_slot, r_hi, r_lo + i, els);
 		}
 		return i;
 	}
